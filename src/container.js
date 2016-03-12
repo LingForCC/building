@@ -4,10 +4,8 @@ var vertical = 0;
 var horizontal = 0;
 
 function createContainer(view, container) {
-    console.log(container);
     window.addEventListener('keydown', function(e) {
         if (e.keyCode === 37 || e.keyCode === 65) { // <=
-            console.log('s');
             var num = horizontal / 360 * Math.PI * 2;
             x += Math.cos(num) * 10;
             y -= Math.sin(num) * 10;
@@ -17,14 +15,12 @@ function createContainer(view, container) {
             var num = horizontal / 360 * Math.PI * 2;
             x -= Math.sin(num) * 10;
             y -= Math.cos(num) * 10;
-            console.log(num + ":" + Math.cos(num) * 10);
             move(container, x, y, vertical, horizontal);
         }
         if (e.keyCode === 39 || e.keyCode === 68) { // =>
             var num = horizontal / 360 * Math.PI * 2;
             x -= Math.cos(num) * 10;
             y += Math.sin(num) * 10;
-            console.log(Math.sin(num) * 5);
             move(container, x, y, vertical, horizontal);
         }
         if (e.keyCode === 40 || e.keyCode === 83) { // v
@@ -35,7 +31,6 @@ function createContainer(view, container) {
         }
     });
     window.addEventListener('mousemove', function(e) {
-        console.dir(container.clientHeight);
         vertical = e.y / view.clientHeight * 360 * (-1);
         horizontal = e.x / view.clientWidth * 360;
         move(container, x, y, vertical, horizontal);
