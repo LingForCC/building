@@ -58,7 +58,11 @@
             <div class='rect2 rotate'></div>
         </div>
     </div>
-    <script type="text/javascript" src="container.js"></script>
+    <script type="text/javascript" src="build/build.js"></script>
+    <script type="text/javascript">
+    console.log(createContainer);
+    createContainer(document.querySelector('.view'), document.querySelector('.world'));
+    </script>
 </body>
 
 </html>
