@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <style type="text/css">
+    html {
+        width: 100%;
+        height: 100%;
+    }
+    
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+    }
+    
+    .rect1 {
+        width: 100px;
+        height: 100px;
+        transform: translate3d(0, 300px, 0) rotateX(90deg) rotateZ(0);
+        background-color: black;
+    }
+    
+    .rect2 {
+        width: 100px;
+        height: 100px;
+        transform: translate3d(0, 250px, 0) rotateX(90deg) rotateZ(0);
+        background-color: black;
+    }
+    
+    .view {
+        width: 100%;
+        height: 100%;
+        perspective: 700px;
+    }
+    
+    .world {
+        transform-style: preserve-3d;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+    }
+    
+    .rotate {
+        position: absolute;
+        transform-origin: 0 0;
+        /*transform: rotateX(90deg);*/
+    }
+    </style>
+</head>
+
+<body>
+    <div class='view'>
+        <div class='world'>
+            <div class='rect1 rotate'></div>
+            <div class='rect2 rotate'></div>
+        </div>
+    </div>
+    <script type="text/javascript" src="container.js"></script>
+</body>
+
+</html>
