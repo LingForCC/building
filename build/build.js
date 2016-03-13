@@ -4,6 +4,10 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.createContainer = undefined;
+
+var _dom = require('./dom');
+
 var x = 0;
 var y = 0;
 var vertical = 0;
@@ -49,11 +53,42 @@ function createContainer(view, container) {
 
 function move(world, x, y, vertical, horizontal) {
     world.style['transform-origin'] = x * -1 + 'px ' + y * -1 + 'px -150px';
-    world.style['transform'] = 'translate3d(' + x + 'px, ' + y + 'px, 700px) ' + 'rotateX(' + vertical + 'deg) rotateY(0deg) rotateZ(' + horizontal + 'deg)';
+    // world.style['transform'] = 'translate3d(' + x + 'px, ' + y + 'px, 700px) ' +
+    //     'rotateX(' + vertical + 'deg) rotateY(0deg) rotateZ(' + horizontal + 'deg)';
+    (0, _dom.transform)(world, {
+        translate: {
+            x: x,
+            y: y,
+            z: 700
+        },
+        rotate: {
+            x: vertical,
+            y: 0,
+            z: horizontal
+        }
+    });
 }
 exports.createContainer = createContainer;
 
-},{}],2:[function(require,module,exports){
+},{"./dom":2}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+function dom(type) {
+    return document.createElement(type);
+}
+
+function transform(dom, options) {
+    var string = "translate3d(" + options.translate.x + "px, " + options.translate.y + "px, " + options.translate.z + "px)     rotateX(" + options.rotate.x + "deg)     rotateY(" + options.rotate.y + "deg)     rotateZ(" + options.rotate.z + "deg)\n    ";
+    console.log(string);
+    dom.style.transform = string;
+}
+exports.dom = dom;
+exports.transform = transform;
+
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -67,7 +102,7 @@ var _container = require('./container.js');
 window.createContainer = _container.createContainer;
 exports.createContainer = _container.createContainer;
 
-},{"./container.js":1}]},{},[2])
+},{"./container.js":1}]},{},[3])
 
 
 //# sourceMappingURL=build.js.map
