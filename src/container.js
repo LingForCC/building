@@ -1,4 +1,5 @@
-import { dom, transform } from './dom'
+import dom from './dom'
+import { parseTemplate, loadMap } from './map'
 var x = 0;
 var y = 0;
 var vertical = 0;
@@ -36,6 +37,14 @@ function createContainer(view, container) {
         horizontal = e.x / view.clientWidth * 360;
         move(container, x, y, vertical, horizontal);
     })
+    var data = [{
+        x: 100,
+        y: 100,
+        w: 100,
+        l: 100,
+        h: 100
+    }]
+    loadMap(data).render(container);
 }
 
 
@@ -44,18 +53,18 @@ function move(world, x, y, vertical, horizontal) {
     world.style['transform-origin'] = (x * (-1)) + 'px ' + (y * (-1)) + 'px -150px';
     // world.style['transform'] = 'translate3d(' + x + 'px, ' + y + 'px, 700px) ' +
     //     'rotateX(' + vertical + 'deg) rotateY(0deg) rotateZ(' + horizontal + 'deg)';
-        transform(world, {
-            translate: {
-                x: x,
-                y: y,
-                z: 700
-            },
-            rotate: {
-                x: vertical,
-                y: 0,
-                z: horizontal
-            }
-        })
+    dom.transform(world, {
+        translate: {
+            x: x,
+            y: y,
+            z: 700
+        },
+        rotate: {
+            x: vertical,
+            y: 0,
+            z: horizontal
+        }
+    })
 }
 export {
     createContainer

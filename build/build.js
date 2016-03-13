@@ -8,6 +8,12 @@ exports.createContainer = undefined;
 
 var _dom = require('./dom');
 
+var _dom2 = _interopRequireDefault(_dom);
+
+var _map = require('./map');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var x = 0;
 var y = 0;
 var vertical = 0;
@@ -49,13 +55,21 @@ function createContainer(view, container) {
         horizontal = e.x / view.clientWidth * 360;
         move(container, x, y, vertical, horizontal);
     });
+    var data = [{
+        x: 100,
+        y: 100,
+        w: 100,
+        l: 100,
+        h: 100
+    }];
+    (0, _map.loadMap)(data).render(container);
 }
 
 function move(world, x, y, vertical, horizontal) {
     world.style['transform-origin'] = x * -1 + 'px ' + y * -1 + 'px -150px';
     // world.style['transform'] = 'translate3d(' + x + 'px, ' + y + 'px, 700px) ' +
     //     'rotateX(' + vertical + 'deg) rotateY(0deg) rotateZ(' + horizontal + 'deg)';
-    (0, _dom.transform)(world, {
+    _dom2.default.transform(world, {
         translate: {
             x: x,
             y: y,
@@ -70,23 +84,33 @@ function move(world, x, y, vertical, horizontal) {
 }
 exports.createContainer = createContainer;
 
-},{"./dom":2}],2:[function(require,module,exports){
-"use strict";
+},{"./dom":2,"./map":4}],2:[function(require,module,exports){
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-function dom(type) {
-    return document.createElement(type);
-}
+var dom = {};
 
-function transform(dom, options) {
-    var string = "translate3d(" + options.translate.x + "px, " + options.translate.y + "px, " + options.translate.z + "px)     rotateX(" + options.rotate.x + "deg)     rotateY(" + options.rotate.y + "deg)     rotateZ(" + options.rotate.z + "deg)\n    ";
-    console.log(string);
+dom.create = function (type) {
+    return document.createElement(type);
+};
+
+dom.transform = function (dom, options) {
+    var string = 'translate3d(' + options.translate.x + 'px, ' + options.translate.y + 'px, ' + options.translate.z + 'px)     rotateX(' + options.rotate.x + 'deg)     rotateY(' + options.rotate.y + 'deg)     rotateZ(' + options.rotate.z + 'deg)\n    ';
     dom.style.transform = string;
-}
-exports.dom = dom;
-exports.transform = transform;
+    return dom;
+};
+
+dom.size = function (dom, options) {
+    // TODO: height(tall)
+    console.log(options);
+    dom.style.width = options.w + 'px';
+    dom.style.height = options.l + 'px';
+    dom.style['background-color'] = options.color;
+    return dom;
+};
+exports.default = dom;
 
 },{}],3:[function(require,module,exports){
 'use strict';
@@ -102,7 +126,79 @@ var _container = require('./container.js');
 window.createContainer = _container.createContainer;
 exports.createContainer = _container.createContainer;
 
-},{"./container.js":1}]},{},[3])
+},{"./container.js":1}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.loadMap = exports.parseTemplate = undefined;
+
+var _dom = require('./dom');
+
+var _dom2 = _interopRequireDefault(_dom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var data = [{
+    x: 100,
+    y: 100,
+    w: 100,
+    l: 100,
+    h: 100
+}];
+
+function parseTemplate(root) {}
+
+function loadMap(data) {
+    var map = [];
+    data.forEach(function (tile) {
+        map.push(createBuilding(tile));
+    });
+    console.log(map);
+    return {
+        render: function render(target) {
+            map.forEach(function (building) {
+                return target.appendChild(building);
+            });
+        }
+    };
+}
+
+function createBuilding(options) {
+    options = Object.assign({
+        x: 0,
+        y: 0,
+        z: 0,
+        w: 100,
+        l: 100,
+        h: 100,
+        color: '#000'
+    }, options);
+
+    // TODO: Use compose function
+    return _dom2.default.size(_dom2.default.transform(_dom2.default.create('div'), {
+        translate: {
+            x: options.x,
+            y: options.y,
+            z: options.z
+        },
+        rotate: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }), {
+        w: options.w,
+        l: options.l,
+        h: options.h,
+        color: options.color
+    });
+}
+exports.parseTemplate = parseTemplate;
+exports.loadMap = loadMap;
+
+},{"./dom":2}]},{},[3])
 
 
 //# sourceMappingURL=build.js.map
