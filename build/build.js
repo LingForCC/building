@@ -61,8 +61,27 @@ function createContainer(view, container) {
         w: 100,
         l: 100,
         h: 100
+    }, {
+        x: 150,
+        y: 100,
+        w: 100,
+        l: 100,
+        h: 150
+    }, {
+        x: 200,
+        y: 100,
+        w: 100,
+        l: 100,
+        h: 200
+    }, {
+        x: 150,
+        y: 100,
+        w: 100,
+        l: 100,
+        h: 250
     }];
-    (0, _map.loadMap)(data).render(container);
+    // loadMap(data).render(container);
+    (0, _map.parseTemplate)(container);
 }
 
 function move(world, x, y, vertical, horizontal) {
@@ -70,16 +89,8 @@ function move(world, x, y, vertical, horizontal) {
     // world.style['transform'] = 'translate3d(' + x + 'px, ' + y + 'px, 700px) ' +
     //     'rotateX(' + vertical + 'deg) rotateY(0deg) rotateZ(' + horizontal + 'deg)';
     _dom2.default.transform(world, {
-        translate: {
-            x: x,
-            y: y,
-            z: 700
-        },
-        rotate: {
-            x: vertical,
-            y: 0,
-            z: horizontal
-        }
+        translate: [x, y, 700],
+        rotate: [vertical, 0, horizontal]
     });
 }
 exports.createContainer = createContainer;
@@ -97,7 +108,7 @@ dom.create = function (type) {
 };
 
 dom.transform = function (dom, options) {
-    var string = 'translate3d(' + options.translate.x + 'px, ' + options.translate.y + 'px, ' + options.translate.z + 'px)     rotateX(' + options.rotate.x + 'deg)     rotateY(' + options.rotate.y + 'deg)     rotateZ(' + options.rotate.z + 'deg)\n    ';
+    var string = 'translate3d(' + options.translate[0] + 'px, ' + options.translate[1] + 'px, ' + options.translate[2] + 'px)     rotateX(' + options.rotate[0] + 'deg)     rotateY(' + options.rotate[1] + 'deg)     rotateZ(' + options.rotate[2] + 'deg)\n    ';
     dom.style.transform = string;
     return dom;
 };
@@ -140,22 +151,26 @@ var _dom2 = _interopRequireDefault(_dom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var data = [{
-    x: 100,
-    y: 100,
-    w: 100,
-    l: 100,
-    h: 100
-}];
+function parseTemplate(root) {
+    var level = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
 
-function parseTemplate(root) {}
+    Array.from(root.childNodes).forEach(function (node) {
+        if (node.nodeType === 1) {
+            parseTemplate(node, ++level);
+            // FIXME: Will override previous transform attributes
+            _dom2.default.transform(node, {
+                translate: [0, 0, level * -5],
+                rotate: [0, 0, 0]
+            });
+        }
+    });
+}
 
 function loadMap(data) {
     var map = [];
     data.forEach(function (tile) {
         map.push(createBuilding(tile));
     });
-    console.log(map);
     return {
         render: function render(target) {
             map.forEach(function (building) {
@@ -178,20 +193,11 @@ function createBuilding(options) {
 
     // TODO: Use compose function
     return _dom2.default.size(_dom2.default.transform(_dom2.default.create('div'), {
-        translate: {
-            x: options.x,
-            y: options.y,
-            z: options.z
-        },
-        rotate: {
-            x: 0,
-            y: 0,
-            z: 0
-        }
+        translate: [options.x, options.y, options.x],
+        rotate: [0, 0, 0]
     }), {
         w: options.w,
         l: options.l,
-        h: options.h,
         color: options.color
     });
 }

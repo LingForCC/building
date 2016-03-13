@@ -1,20 +1,23 @@
 import dom from './dom'
-var data = [{
-    x: 100,
-    y: 100,
-    w: 100,
-    l: 100,
-    h: 100
-}]
 
-function parseTemplate(root) {}
+function parseTemplate(root, level = 0) {
+    Array.from(root.childNodes).forEach(node => {
+        if (node.nodeType === 1) {
+            parseTemplate(node, ++level);
+            // FIXME: Will override previous transform attributes
+            dom.transform(node, {
+                translate: [0, 0, level * (-5)],
+                rotate: [0, 0, 0]
+            })
+        }
+    })
+}
 
 function loadMap(data) {
     var map = [];
     data.forEach(tile => {
         map.push(createBuilding(tile))
     })
-    console.log(map);
     return {
         render: function(target) {
             map.forEach(building => target.appendChild(building));
@@ -37,20 +40,11 @@ function createBuilding(options) {
     return dom.size(
         dom.transform(
             dom.create('div'), {
-                translate: {
-                    x: options.x,
-                    y: options.y,
-                    z: options.z
-                },
-                rotate: {
-                    x: 0,
-                    y: 0,
-                    z: 0
-                }
+                translate: [options.x, options.y, options.x],
+                rotate: [0, 0, 0]
             }), {
             w: options.w,
             l: options.l,
-            h: options.h,
             color: options.color
         }
     )

@@ -43,8 +43,27 @@ function createContainer(view, container) {
         w: 100,
         l: 100,
         h: 100
+    }, {
+        x: 150,
+        y: 100,
+        w: 100,
+        l: 100,
+        h: 150
+    }, {
+        x: 200,
+        y: 100,
+        w: 100,
+        l: 100,
+        h: 200
+    }, {
+        x: 150,
+        y: 100,
+        w: 100,
+        l: 100,
+        h: 250
     }]
-    loadMap(data).render(container);
+    // loadMap(data).render(container);
+    parseTemplate(container);
 }
 
 
@@ -54,16 +73,8 @@ function move(world, x, y, vertical, horizontal) {
     // world.style['transform'] = 'translate3d(' + x + 'px, ' + y + 'px, 700px) ' +
     //     'rotateX(' + vertical + 'deg) rotateY(0deg) rotateZ(' + horizontal + 'deg)';
     dom.transform(world, {
-        translate: {
-            x: x,
-            y: y,
-            z: 700
-        },
-        rotate: {
-            x: vertical,
-            y: 0,
-            z: horizontal
-        }
+        translate: [x, y, 700],
+        rotate: [vertical, 0, horizontal]
     })
 }
 export {

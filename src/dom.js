@@ -6,10 +6,10 @@ dom.create = function(type) {
 
 dom.transform = function(dom, options) {
     var string =
-        `translate3d(${options.translate.x}px, ${options.translate.y}px, ${options.translate.z}px) \
-    rotateX(${options.rotate.x}deg) \
-    rotateY(${options.rotate.y}deg) \
-    rotateZ(${options.rotate.z}deg)
+        `translate3d(${options.translate[0]}px, ${options.translate[1]}px, ${options.translate[2]}px) \
+    rotateX(${options.rotate[0]}deg) \
+    rotateY(${options.rotate[1]}deg) \
+    rotateZ(${options.rotate[2]}deg)
     `
     dom.style.transform = string;
     return dom;
