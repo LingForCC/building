@@ -58,10 +58,14 @@ function createContainer(view, container) {
             if (directions.indexOf('BACKWARD') > -1) directions.splice(directions.indexOf('BACKWARD'), 1);
         }
     });
+    var prevX = 0,
+        prevY = 0;
     window.addEventListener('mousemove', function (e) {
-        vertical = e.y / view.clientHeight * 360 * -1;
-        horizontal = e.x / view.clientWidth * 360;
+        vertical += (e.y - prevY) * 1.5 / view.clientHeight * 360 * -1;
+        horizontal += (e.x - prevX) * 1.5 / view.clientWidth * 360;
         move(container, x, y, vertical, horizontal);
+        prevY = e.y;
+        prevX = e.x;
     });
     var data = [{
         x: 100,
