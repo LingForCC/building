@@ -10,30 +10,38 @@ var directions = [];
 function createContainer(view, container) {
     window.addEventListener('keydown', function(e) {
         if (e.keyCode === 37 || e.keyCode === 65) { // <=
-            directions.push('LEFT');
+            if (directions.indexOf('LEFT') === -1)
+                directions.push('LEFT');
         }
         if (e.keyCode === 38 || e.keyCode === 87) { // ^
-            directions.push('FORWARD');
+            if (directions.indexOf('FORWARD') === -1)
+                directions.push('FORWARD');
         }
         if (e.keyCode === 39 || e.keyCode === 68) { // =>
-            directions.push('RIGHT');
+            if (directions.indexOf('RIGHT') === -1)
+                directions.push('RIGHT');
         }
         if (e.keyCode === 40 || e.keyCode === 83) { // v
-            directions.push('BACKWARD');
+            if (directions.indexOf('BACKWARD') === -1)
+                directions.push('BACKWARD');
         }
     });
     window.addEventListener('keyup', function(e) {
-        if (e.keyCode === 37 ||
-            e.keyCode === 65 ||
-            e.keyCode === 38 ||
-            e.keyCode === 87 ||
-            e.keyCode === 39 ||
-            e.keyCode === 68 ||
-            e.keyCode === 40 ||
-            e.keyCode === 83) {
-            console.log('stop');
-            directions = [];
-            console.log(directions);
+        if (e.keyCode === 37 || e.keyCode === 65) { // <=
+            if (directions.indexOf('LEFT') > -1)
+                directions.splice(directions.indexOf('LEFT'), 1);
+        }
+        if (e.keyCode === 38 || e.keyCode === 87) { // ^
+            if (directions.indexOf('FORWARD') > -1)
+                directions.splice(directions.indexOf('FORWARD'), 1);
+        }
+        if (e.keyCode === 39 || e.keyCode === 68) { // =>
+            if (directions.indexOf('RIGHT') > -1)
+                directions.splice(directions.indexOf('RIGHT'), 1);
+        }
+        if (e.keyCode === 40 || e.keyCode === 83) { // v
+            if (directions.indexOf('BACKWARD') > -1)
+                directions.splice(directions.indexOf('BACKWARD'), 1);
         }
 
     });
