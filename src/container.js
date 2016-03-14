@@ -4,33 +4,38 @@ var x = 0;
 var y = 0;
 var vertical = 0;
 var horizontal = 0;
+var speed = 5;
+var directions = [];
 
 function createContainer(view, container) {
     window.addEventListener('keydown', function(e) {
         if (e.keyCode === 37 || e.keyCode === 65) { // <=
-            var num = horizontal / 360 * Math.PI * 2;
-            x += Math.cos(num) * 10;
-            y -= Math.sin(num) * 10;
-            move(container, x, y, vertical, horizontal);
+            directions.push('LEFT');
         }
         if (e.keyCode === 38 || e.keyCode === 87) { // ^
-            var num = horizontal / 360 * Math.PI * 2;
-            x -= Math.sin(num) * 10;
-            y -= Math.cos(num) * 10;
-            move(container, x, y, vertical, horizontal);
+            directions.push('FORWARD');
         }
         if (e.keyCode === 39 || e.keyCode === 68) { // =>
-            var num = horizontal / 360 * Math.PI * 2;
-            x -= Math.cos(num) * 10;
-            y += Math.sin(num) * 10;
-            move(container, x, y, vertical, horizontal);
+            directions.push('RIGHT');
         }
         if (e.keyCode === 40 || e.keyCode === 83) { // v
-            var num = horizontal / 360 * Math.PI * 2;
-            x += Math.sin(num) * 10;
-            y += Math.cos(num) * 10;
-            move(container, x, y, vertical, horizontal);
+            directions.push('BACKWARD');
         }
+    });
+    window.addEventListener('keyup', function(e) {
+        if (e.keyCode === 37 ||
+            e.keyCode === 65 ||
+            e.keyCode === 38 ||
+            e.keyCode === 87 ||
+            e.keyCode === 39 ||
+            e.keyCode === 68 ||
+            e.keyCode === 40 ||
+            e.keyCode === 83) {
+            console.log('stop');
+            directions = [];
+            console.log(directions);
+        }
+
     });
     window.addEventListener('mousemove', function(e) {
         vertical = e.y / view.clientHeight * 360 * (-1);
@@ -62,11 +67,37 @@ function createContainer(view, container) {
         l: 100,
         h: 250
     }]
+
     // loadMap(data).render(container);
     parseTemplate(container);
+    window.requestAnimationFrame(() => {
+        walking(container);
+    })
 }
 
-
+function walking(world) {
+    var num = horizontal / 360 * Math.PI * 2;
+    if (directions.indexOf('FORWARD') > -1) {
+        x -= Math.sin(num) * speed;
+        y -= Math.cos(num) * speed;
+    }
+    if (directions.indexOf('LEFT') > -1) {
+        x += Math.cos(num) * speed;
+        y -= Math.sin(num) * speed;
+    }
+    if (directions.indexOf('RIGHT') > -1) {
+        x -= Math.cos(num) * speed;
+        y += Math.sin(num) * speed;
+    }
+    if (directions.indexOf('BACKWARD') > -1) {
+        x += Math.sin(num) * speed;
+        y += Math.cos(num) * speed;
+    }
+    move(world, x, y, vertical, horizontal)
+    window.requestAnimationFrame(() => {
+        walking(world);
+    })
+}
 
 function move(world, x, y, vertical, horizontal) {
     world.style['transform-origin'] = (x * (-1)) + 'px ' + (y * (-1)) + 'px -150px';
@@ -76,6 +107,7 @@ function move(world, x, y, vertical, horizontal) {
         translate: [x, y, 700],
         rotate: [vertical, 0, horizontal]
     })
+
 }
 export {
     createContainer
